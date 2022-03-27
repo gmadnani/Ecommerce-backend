@@ -5,8 +5,12 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 
 // get all products
 router.get('/', (req, res) => {
+
+  //finding all the products using the findAll function
   Product.findAll({
     attributes: ['id', 'product_name', 'price', 'stock'],
+
+    //from particular models
     include: [
       {
         model: Category,
@@ -18,6 +22,7 @@ router.get('/', (req, res) => {
       }
     ]
   })
+    //displaying the data
     .then(data => res.json(data))
     .catch(err => {
       console.log(err);
@@ -27,6 +32,8 @@ router.get('/', (req, res) => {
 
 // get one product
 router.get('/:id', (req, res) => {
+
+  //finding a product by id using the findOne function
   Product.findOne({
     where: {
       id: req.params.id
@@ -44,10 +51,14 @@ router.get('/:id', (req, res) => {
     ]
   })
     .then(data => {
+
+      //if no data : error
       if (!data) {
         res.status(404).json({message: 'No product found with this id'});
         return;
       }
+
+      //display the data
       res.json(data);
     })
     .catch(err => {
